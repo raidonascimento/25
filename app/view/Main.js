@@ -1,33 +1,74 @@
-Ext.define('Users.view.Main', {
-    extend: 'Ext.Container',
+Ext.define('MyApp.view.Main', {
+    extend: 'Ext.tab.Panel',
     xtype: 'main',
     requires: [
-        'Ext.TitleBar',
-        'Users.view.UserForm'
-
+	'Ext.TitleBar',
+	'Ext.Video',
+	'Ext.device.Camera'
     ],
     config: {
-        fullscreen: true,
-        layout: 'card',
-        items: [{
-            xtype: 'toolbar',
-            docked: 'top',
-            title: 'Users',
-            items: [{
-                xtype: 'button',
-                text: 'Back',
-                action: 'back',
-                ui: 'back',
-                hidden: true
-            }, {
-                xtype: 'spacer'
-            }, {
-                xtype: 'button',
-                text: 'New User',
-                action: 'newuser'
-            }]
-        },  {
-            xtype: 'userform'
-        }]
+	tabBarPosition: 'bottom',
+	items: [
+	    {
+		title: 'Welcome',
+		iconCls: 'home',
+		styleHtmlContent: true,
+		scrollable: true,
+		items: {
+		    docked: 'top',
+		    xtype: 'titlebar',
+		    title: 'Welcome to Sencha Touch 2'
+		},
+		html: [
+		    "You've just generated a new Sencha Touch 2 project. What you're looking at right now is the ",
+		    "contents of <a target='_blank' href=\"app/view/Main.js\">app/view/Main.js</a> - edit that file ",
+		    "and refresh to change what's rendered here."
+		].join("")
+	    },
+	    {
+		title: 'Get Started',
+		iconCls: 'action',
+		items: [
+		    {
+			docked: 'top',
+			xtype: 'titlebar',
+			title: 'Getting Started'
+		    },
+		    {
+			xtype: 'video',
+			url: 'http://av.vimeo.com/64284/137/87347327.mp4?token=1330978144_f9b698fea38cd408d52a2393240c896c',
+			posterUrl: 'http://b.vimeocdn.com/ts/261/062/261062119_640.jpg'
+		    },
+		    {
+			xtype: 'button',
+			handler: function (button, event) {
+			    alert("entrou aqui");
+			    Ext.device.Camera.capture({
+				source: 'camera',
+				destination: 'data',
+				success: function (imagedata) {
+				    alert("funcionou");
+				    var img = Ext.getCmp('theimage');
+				    img.setSrc('data:image/jpeg;base64,' + imagedata);
+
+				},
+				failure: function () {
+				    alert("NAOfuncionou");
+				    Ext.Msg.alert('Error', 'There was an error when acquiring the picture.');
+				},
+				scope: this
+			    });
+
+
+			}
+
+		    }
+
+
+
+
+		]
+	    }
+	]
     }
 });
